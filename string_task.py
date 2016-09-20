@@ -9,7 +9,7 @@
 # Example output: 'reading'
 def verbing(s):
     if (len(s)>=3):
-        if (s[-3:-1]='ing'):
+        if (s[-4:]='ing'):
             s=s+'ly'
         else:
             s=s+'ing'
@@ -25,8 +25,10 @@ def verbing(s):
 # Example input: 'This dinner is not that bad!'
 # Example output: 'This dinner is good!'
 def not_bad(s):
-    if ((s.find(not)<s.find(bad))and(s.find(bad)!=-1)and(s.find(not)!=-1))
-        s=s[:s.find(not)]+'good'+[s.find(bad)+3:]
+    n=s.find('not')
+    b=s.find('bad')
+    if ((n<b)and(b!=-1)&&(n!=-1))
+        s=s[:n]+'good'+[b+2:]
     return s
  
  
@@ -41,14 +43,9 @@ def not_bad(s):
 # Example input: 'abcd', 'xy'
 # Example output: 'abxcdy'
 def front_back(a, b):
-    if (len(a)%2==0)
-        if (len(b)%2==0)
-            s=a[:len(a)/2+1]+b[:len(b)/2+1]+a[len(a)/2:]+b[len(b)/2:]
-        else
-            s=a[:len(a)/2+1]+b[:len(b)/2+2]+a[len(a)/2:]+b[len(b)/2+1:]
-    else
-        if (len(b)%2==0)
-            s=a[:len(a)/2+2]+b[:len(b)/2+1]+a[len(a)/2+1:]+b[len(b)/2:]
-        else
-            s=a[:len(a)/2+2]+b[:len(b)/2+2]+a[len(a)/2+1:]+b[len(b)/2+1:]
+    ad=len(a)/2
+    bd=len(b)/2
+    ar=a%2
+    br=b%2
+    s=a[:ad+1+ar]+b[:bd+br+1]+a[ad+ar:]+b[bd+br:]
     return s
