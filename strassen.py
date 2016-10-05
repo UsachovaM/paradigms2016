@@ -1,5 +1,4 @@
 import numpy as np
-from math import log2, ceil
 
 
 def find_power2(n):
