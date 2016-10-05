@@ -46,7 +46,6 @@ def strassen(a, b):
 
 def main():
     n = int(input())
-    n_padded = find_power2(n)
     a = read_matr(n)
     b = read_matr(n)
     for row in strassen(a, b)[:n, :n]:
