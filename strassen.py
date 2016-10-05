@@ -1,15 +1,15 @@
 import numpy as np
 
 
-def find_power2(n):
+def near_bigger_power2(n):
     i = 1
     while i < n:
-        i = i * 2
+        i *= 2
     return i
 
 
 def read_matr(n):
-    a = np.zeros((find_power2(n), find_power2(n)), dtype=int)
+    a = np.zeros((near_bigger_power2(n), near_bigger_power2(n)), dtype=int)
     for i in range(n):
         a[i, :n] = np.array(input().split(), dtype=int)
     return a
