@@ -32,7 +32,7 @@ def strassen(a,b,m):
         p4 = strassen(a22, b21-b11, m)
         p5 = strassen(a11+a12, b22, m)
         p6 = strassen(a21-a11, b11+b12, m)
-        p7 = strassen(a12-a22, b12+b22, m)
+        p7 = strassen(a12-a22, b21+b22, m)
         c11 = p1 + p4 - p5 + p7
         c12 = p3 + p5
         c21 = p2 + p4
