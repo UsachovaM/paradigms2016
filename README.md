@@ -1,1 +1,0 @@
-# paradigms2016
