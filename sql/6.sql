@@ -1,4 +1,4 @@
-SELECT City.Name, (100*City.Population / Country.Population) AS PrPop FROM City
-JOIN Country ON Country.Code = City.CountryCode
+SELECT City.Name, City.Population, Country.Population FROM City
+JOIN Country ON City.CountryCode = Country.Code
 GROUP BY Code
-ORDER BY PrPop DESC, City.Name DESC LIMIT 20;
+ORDER BY (100*City.Population / Country.Population) DESC, City.Name DESC LIMIT 20;;
