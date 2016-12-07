@@ -19,7 +19,5 @@ delete _ Nil = Nil
 delete n (Node key value left right) | n < key = Node key value (delete n left) right
                                      | n > key = Node key value left (delete n right)
                                      | n == key = merge left right
-  where merge Nil Nil = Nil
-        merge Nil r = r
-        merge l Nil = l
+  where merge Nil r = r
         merge (Node k v left right) r = merge (merge left right) (insert k v r)
