@@ -1,5 +1,5 @@
 def make_plural(s):
-    if s.endswith('s') or s.endswith('sh') or s.endswith('o'):
+    if s.endswith(('s', 'sh', 'o')):
         return s + 'es'
     elif s.endswith('y'):
         return s[:-1] + 'ies'
@@ -10,7 +10,7 @@ def make_plural(s):
 def get_hash_tag(s):
     i = s.find('{')
     j = s.find('}')
-    if i != -1 and i < j:
+    if i != -1 and i < j - 1:
         return s[i + 1:j]
     else:
         return s
@@ -26,14 +26,19 @@ def tokenize(s):
                 ans.append('')
             s = s[1:]
         else:
-            i = s.find(' ')
-            temp = s[:i]
-            s = s[i:]
-            if temp.find('<') != -1 and temp.find('>') == -1:
+            if ' ' in s:
+                i = s.find(' ')
+                temp = s[:i]
+                s = s[i:]
+            else:
+                temp = s
+                s = ''
+            if '<' in temp and '>' not in temp:
                 temp = temp[:temp.find('<')] + temp[temp.find('<') + 1:]
-                temp = temp + s[:s.find('>')]
-                s = s[s.find('>'):]
-                if s.find(' ') != -1:
+                if '>' in s:
+                    temp = temp + s[:s.find('>')]
+                    s = s[s.find('>'):]
+                if ' ' in s:
                     temp = temp + s[1:s.find(' ')]
                     s = s[s.find(' '):]
                 else:
