@@ -44,19 +44,21 @@ class FunctionDefinition:
 
 
 class Conditional:
-    def __init__(self, condtion, if_true, if_false=None):
+    def __init__(self, condition, if_true, if_false=None):
         self.condition = condition
         self.if_true = if_true
         self.if_false = if_false
 
     def evaluate(self, scope):
         answ = None
-        if self.condition.evaluate(scope):
-            for expr in self.if_true:
-                answ = expr.evaluate(scope)
+        if self.condition.evaluate(scope) != 0:
+            if self.if_true is not None:
+                for expr in self.if_true:
+                    answ = expr.evaluate(scope)
         else:
-            for expr in self.if_false:
-                answ = expr.evaluate(scope)
+            if self.if_false is not None:
+                for expr in self.if_false:
+                    answ = expr.evaluate(scope)
         return answ
 
 
@@ -107,18 +109,18 @@ class BinaryOperation:
         self.op = op
         self.rhs = rhs
         self.OPS = {'+': lambda x, y: x + y,
-               '-': lambda x, y: x - y,
-               '*': lambda x, y: x * y,
-               '/': lambda x, y: x / y,
-               '%': lambda x, y: x % y,
-               '==': lambda x, y: x == y,
-               '!=': lambda x, y: x != y,
-               '<': lambda x, y: x < y,
-               '>': lambda x, y: x > y,
-               '<=': lambda x, y: x <= y,
-               '>=': lambda x, y: x >= y,
-               '&&': lambda x, y: x and y,
-               '||': lambda x, y: x or y}
+                    '-': lambda x, y: x - y,
+                    '*': lambda x, y: x * y,
+                    '/': lambda x, y: x / y,
+                    '%': lambda x, y: x % y,
+                    '==': lambda x, y: x == y,
+                    '!=': lambda x, y: x != y,
+                    '<': lambda x, y: x < y,
+                    '>': lambda x, y: x > y,
+                    '<=': lambda x, y: x <= y,
+                    '>=': lambda x, y: x >= y,
+                    '&&': lambda x, y: x and y,
+                    '||': lambda x, y: x or y}
 
     def evaluate(self, scope):
         return Number(self.OPS[self.op](self.lhs.evaluate(scope).value,
@@ -136,51 +138,3 @@ class UnaryOperation:
             return Number(-num)
         elif self.op == '!':
             return Number(not num)
-
-
-def example():
-    parent = Scope()
-    parent["foo"] = Function(('hello', 'world'),
-                             [Print(BinaryOperation(Reference('hello'),
-                                                    '+',
-                                                    Reference('world')))])
-    parent["bar"] = Number(10)
-    scope = Scope(parent)
-    assert 10 == scope["bar"].value
-    scope["bar"] = Number(20)
-    assert scope["bar"].value == 20
-    print('It should print 2: ', end=' ')
-    FunctionCall(FunctionDefinition('foo', parent['foo']),
-                 [Number(5), UnaryOperation('-', Number(3))]).evaluate(scope)
-
-
-def testBinOp():
-    parent = Scope()
-    x = Number(42)
-    y = Number(-17)
-    z = Number(3)
-    p = Number(0)
-    assert 25 == BinaryOperation(x, '+', y).evaluate(parent).value
-    assert 59 == BinaryOperation(x, '-', y).evaluate(parent).value
-    assert -51 == BinaryOperation(z, '*', y).evaluate(parent).value
-    assert 14 == BinaryOperation(x, '/', z).evaluate(parent).value
-    assert 2 == BinaryOperation(UnaryOperation('-', y), '%',
-                                z).evaluate(parent).value
-    assert 0 == BinaryOperation(x, '==', z).evaluate(parent).value
-    assert 1 == BinaryOperation(x, '!=', z).evaluate(parent).value
-    assert 0 == BinaryOperation(x, '<', z).evaluate(parent).value
-    assert 0 == BinaryOperation(x, '<=', y).evaluate(parent).value
-    assert 1 == BinaryOperation(x, '>=', z).evaluate(parent).value
-    assert 1 == BinaryOperation(z, '>', y).evaluate(parent).value
-    assert 0 == BinaryOperation(p, '&&', z).evaluate(parent).value
-    assert 0 == BinaryOperation(p, '||',
-                                UnaryOperation('!', x)).evaluate(parent).value
-
-
-def my_tests():
-    testBinOp()
-
-
-if __name__ == '__main__':
-    example()
-    my_tests()
