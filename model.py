@@ -1,16 +1,16 @@
 class Scope:
     def __init__(self, parent=None):
-        self.o = {}
+        self.d = {}
         self.parent = parent
 
     def __getitem__(self, key):
-        if key in self.o:
-            return self.o[key]
+        if key in self.d:
+            return self.d[key]
         else:
             return self.parent[key]
 
     def __setitem__(self, key, item):
-        self.o[key] = item
+        self.d[key] = item
 
 
 class Number:
@@ -61,7 +61,7 @@ class Conditional:
                 for expr in self.if_false:
                     answ = expr.evaluate(scope)
         return answ
-    
+
 
 class Print:
     def __init__(self, expr):
@@ -108,7 +108,7 @@ class BinaryOperation:
     OPS = {'+': lambda x, y: x + y,
            '-': lambda x, y: x - y,
            '*': lambda x, y: x * y,
-           '/': lambda x, y: (x - (x % y)) / y,
+           '/': lambda x, y: x // y,
            '%': lambda x, y: x % y,
            '==': lambda x, y: x == y,
            '!=': lambda x, y: x != y,
@@ -123,10 +123,11 @@ class BinaryOperation:
         self.lhs = lhs
         self.op = op
         self.rhs = rhs
-        
+
     def evaluate(self, scope):
-        return Number(BinaryOperation.OPS[self.op](self.lhs.evaluate(scope).value,
-                                                   self.rhs.evaluate(scope).value))
+        return Number(BinaryOperation.OPS[self.op](
+                          self.lhs.evaluate(scope).value,
+                          self.rhs.evaluate(scope).value))
 
 
 class UnaryOperation:
