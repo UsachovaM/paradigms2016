@@ -8,8 +8,8 @@ def make_plural(s):
 
 
 def get_hash_tag(s):
-    if '{' in s and s.find('{') < s.find('}') - 1:
-        return s[s.find('{') + 1:s.find('}')]
+    if '{' in s and s[s.find('{'):].find('}') > 1:
+        return s[s.find('{') + 1: s[s.find('{'):].find('}') + s.find('{')]
     else:
         return s
 
