@@ -1,16 +1,16 @@
 class Scope:
     def __init__(self, parent=None):
-        self.d = {}
+        self.var = {}
         self.parent = parent
 
     def __getitem__(self, key):
-        if key in self.d:
-            return self.d[key]
+        if key in self.var:
+            return self.var[key]
         else:
             return self.parent[key]
 
     def __setitem__(self, key, item):
-        self.d[key] = item
+        self.var[key] = item
 
 
 class Number:
