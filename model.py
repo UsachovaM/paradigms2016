@@ -1,16 +1,16 @@
 class Scope:
     def __init__(self, parent=None):
-        self.obj = {}
+        self.o = {}
         self.parent = parent
 
     def __getitem__(self, key):
-        if key in self.obj:
-            return self.obj[key]
+        if key in self.o:
+            return self.o[key]
         else:
             return self.parent[key]
 
     def __setitem__(self, key, item):
-        self.obj[key] = item
+        self.o[key] = item
 
 
 class Number:
@@ -27,7 +27,7 @@ class Function:
         self.body = body
 
     def evaluate(self, scope):
-        answ = None
+        answ = Number(0)
         for expr in self.body:
             answ = expr.evaluate(scope)
         return answ
@@ -104,27 +104,28 @@ class Reference:
 
 
 class BinaryOperation:
+    OPS = {'+': lambda x, y: x + y,
+           '-': lambda x, y: x - y,
+           '*': lambda x, y: x * y,
+           '/': lambda x, y: (x - (x % y)) / y,
+           '%': lambda x, y: x % y,
+           '==': lambda x, y: x == y,
+           '!=': lambda x, y: x != y,
+           '<': lambda x, y: x < y,
+           '>': lambda x, y: x > y,
+           '<=': lambda x, y: x <= y,
+           '>=': lambda x, y: x >= y,
+           '&&': lambda x, y: x and y,
+           '||': lambda x, y: x or y}
+
     def __init__(self, lhs, op, rhs):
         self.lhs = lhs
         self.op = op
         self.rhs = rhs
-        self.OPS = {'+': lambda x, y: x + y,
-                    '-': lambda x, y: x - y,
-                    '*': lambda x, y: x * y,
-                    '/': lambda x, y: x / y,
-                    '%': lambda x, y: x % y,
-                    '==': lambda x, y: x == y,
-                    '!=': lambda x, y: x != y,
-                    '<': lambda x, y: x < y,
-                    '>': lambda x, y: x > y,
-                    '<=': lambda x, y: x <= y,
-                    '>=': lambda x, y: x >= y,
-                    '&&': lambda x, y: x and y,
-                    '||': lambda x, y: x or y}
-
+        
     def evaluate(self, scope):
-        return Number(self.OPS[self.op](self.lhs.evaluate(scope).value,
-                                        self.rhs.evaluate(scope).value))
+        return Number(BinaryOperation.OPS[self.op](self.lhs.evaluate(scope).value,
+                                                   self.rhs.evaluate(scope).value))
 
 
 class UnaryOperation:
