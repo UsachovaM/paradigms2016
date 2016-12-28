@@ -89,48 +89,48 @@ class TestPrint:
         assert int(sys.stdout.getvalue()) == 42
 
 
-class BinaryOperation:
-    def test_binary_operation_addition():
+class TestBinaryOperation:
+    def test_binary_operation_addition(self):
         parent = Scope()
         assert 25 == BinaryOperation(Number(42), '+',
                                      Number(-17)).evaluate(parent).value
 
-    def test_binary_operation_multiplication():
+    def test_binary_operation_multiplication(self):
         parent = Scope()
         assert -51 == BinaryOperation(Number(3), '*',
                                       Number(-17)).evaluate(parent).value
 
-    def test_binary_operation_division():
+    def test_binary_operation_division(self):
         parent = Scope()
         assert 14 == BinaryOperation(Number(42), '/',
                                      Number(3)).evaluate(parent).value
 
-    def test_binary_operation_module():
+    def test_binary_operation_module(self):
         parent = Scope()
         assert 2 == BinaryOperation(UnaryOperation('-', Number(-17)), '%',
                                     Number(3)).evaluate(parent).value
 
-    def test_binary_operation_comparation():
+    def test_binary_operation_comparation(self):
         parent = Scope()
         assert 0 != BinaryOperation(Number(42), '!=',
                                     Number(3)).evaluate(parent).value
 
-    def test_binary_operation_and():
+    def test_binary_operation_and(self):
         parent = Scope()
         assert 0 == BinaryOperation(Number(0), '&&',
                                     Number(3)).evaluate(parent).value
 
-    def test_binary_operation_or():
+    def test_binary_operation_or(self):
         parent = Scope()
         assert 0 != BinaryOperation(Number(0), '||',
                                     Number(42)).evaluate(parent).value
 
 
-class UnaryOperation:
-    def test_unary_operation_minus():
+class TestUnaryOperation:
+    def test_unary_operation_minus(self):
         parent = Scope()
         assert -42 == UnaryOperation('-', Number(42)).evaluate(parent).value
 
-    def test_unary_operation_not():
+    def test_unary_operation_not(self):
         parent = Scope()
         assert 0 == UnaryOperation('!', Number(42)).evaluate(parent).value
