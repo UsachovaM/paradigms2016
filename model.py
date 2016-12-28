@@ -28,8 +28,9 @@ class Function:
 
     def evaluate(self, scope):
         answ = Number(0)
-        for expr in self.body:
-            answ = expr.evaluate(scope)
+        if self.body is not None:
+            for expr in self.body:
+                answ = expr.evaluate(scope)
         return answ
 
 
@@ -51,7 +52,7 @@ class Conditional:
 
     def evaluate(self, scope):
         answ = None
-        if self.condition.evaluate(scope) != 0:
+        if self.condition.evaluate(scope).value:
             if self.if_true is not None:
                 for expr in self.if_true:
                     answ = expr.evaluate(scope)
@@ -60,7 +61,7 @@ class Conditional:
                 for expr in self.if_false:
                     answ = expr.evaluate(scope)
         return answ
-
+    
 
 class Print:
     def __init__(self, expr):
