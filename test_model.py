@@ -91,46 +91,37 @@ class TestPrint:
 
 class TestBinaryOperation:
     def test_binary_operation_addition(self):
-        parent = Scope()
-        assert 25 == BinaryOperation(Number(42), '+',
-                                     Number(-17)).evaluate(parent).value
+        assert 25 == get_v(BinaryOperation(Number(42), '+',
+                                           Number(-17)))
 
     def test_binary_operation_multiplication(self):
-        parent = Scope()
-        assert -51 == BinaryOperation(Number(3), '*',
-                                      Number(-17)).evaluate(parent).value
+        assert -51 == get_v(BinaryOperation(Number(3), '*',
+                                            Number(-17)))
 
     def test_binary_operation_division(self):
-        parent = Scope()
-        assert 14 == BinaryOperation(Number(42), '/',
-                                     Number(3)).evaluate(parent).value
+        assert 14 == get_v(BinaryOperation(Number(42), '/',
+                                           Number(3)))
 
     def test_binary_operation_module(self):
-        parent = Scope()
-        assert 2 == BinaryOperation(UnaryOperation('-', Number(-17)), '%',
-                                    Number(3)).evaluate(parent).value
+        assert 2 == get_v(BinaryOperation(Number(17), '%',
+                                          Number(3)))
 
     def test_binary_operation_comparation(self):
-        parent = Scope()
-        assert 0 != BinaryOperation(Number(42), '!=',
-                                    Number(3)).evaluate(parent).value
+        assert 0 != get_v(BinaryOperation(Number(42), '!=',
+                                          Number(3)))
 
     def test_binary_operation_and(self):
-        parent = Scope()
-        assert 0 == BinaryOperation(Number(0), '&&',
-                                    Number(3)).evaluate(parent).value
+        assert 0 == get_v(BinaryOperation(Number(0), '&&',
+                                          Number(3)))
 
     def test_binary_operation_or(self):
-        parent = Scope()
-        assert 0 != BinaryOperation(Number(0), '||',
-                                    Number(42)).evaluate(parent).value
+        assert 0 != get_v(BinaryOperation(Number(0), '||',
+                                          Number(42)))
 
 
 class TestUnaryOperation:
     def test_unary_operation_minus(self):
-        parent = Scope()
-        assert -42 == UnaryOperation('-', Number(42)).evaluate(parent).value
+        assert -42 == get_v(UnaryOperation('-', Number(42)))
 
     def test_unary_operation_not(self):
-        parent = Scope()
-        assert 0 == UnaryOperation('!', Number(42)).evaluate(parent).value
+        assert 0 == get_v(UnaryOperation('!', Number(42)))
