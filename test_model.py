@@ -33,6 +33,7 @@ class TestNumber:
     def test_number(self):
         assert get_v(Number(42)) == 42
 
+
 class TestFunctionDefinition:
     def test_function_definition(self):
         scope = {}
@@ -45,9 +46,8 @@ class TestFunctionCall:
     def test_function_call(self):
         scope = {}
         scope["answer"] = Function((), [Number(42)])
-        ans = FunctionCall(FunctionDefinition('func', scope["answer"]),[])
+        ans = FunctionCall(FunctionDefinition('func', scope["answer"]), [])
         assert get_v(ans) == 42
-        
 
 
 class TestReference:
@@ -88,33 +88,49 @@ class TestPrint:
         Print(Number(42)).evaluate(scope)
         assert int(sys.stdout.getvalue()) == 42
 
-def test_BinaryOperation():
-    parent = Scope()
-    x = Number(42)
-    y = Number(-17)
-    z = Number(3)
-    p = Number(0)
-    assert 25 == BinaryOperation(x, '+', y).evaluate(parent).value
-    assert 59 == BinaryOperation(x, '-', y).evaluate(parent).value
-    assert -51 == BinaryOperation(z, '*', y).evaluate(parent).value
-    assert 14 == BinaryOperation(x, '/', z).evaluate(parent).value
-    assert 2 == BinaryOperation(x, '/',
-                                UnaryOperation('-', y)).evaluate(parent).value
-    assert 2 == BinaryOperation(UnaryOperation('-', y), '%',
-                                z).evaluate(parent).value
-    assert 0 == BinaryOperation(x, '==', z).evaluate(parent).value
-    assert 1 == BinaryOperation(x, '!=', z).evaluate(parent).value
-    assert 0 == BinaryOperation(x, '<', z).evaluate(parent).value
-    assert 0 == BinaryOperation(x, '<=', y).evaluate(parent).value
-    assert 1 == BinaryOperation(x, '>=', z).evaluate(parent).value
-    assert 1 == BinaryOperation(z, '>', y).evaluate(parent).value
-    assert 0 == BinaryOperation(p, '&&', z).evaluate(parent).value
-    assert 0 == BinaryOperation(p, '||',
-                                UnaryOperation('!', x)).evaluate(parent).value
+
+class BinaryOperation:
+    def test_binary_operation_addition():
+        parent = Scope()
+        assert 25 == BinaryOperation(Number(42), '+',
+                                     Number(-17)).evaluate(parent).value
+
+    def test_binary_operation_multiplication():
+        parent = Scope()
+        assert -51 == BinaryOperation(Number(3), '*',
+                                      Number(-17)).evaluate(parent).value
+
+    def test_binary_operation_division():
+        parent = Scope()
+        assert 14 == BinaryOperation(Number(42), '/',
+                                     Number(3)).evaluate(parent).value
+
+    def test_binary_operation_module():
+        parent = Scope()
+        assert 2 == BinaryOperation(UnaryOperation('-', Number(-17)), '%',
+                                    Number(3)).evaluate(parent).value
+
+    def test_binary_operation_comparation():
+        parent = Scope()
+        assert 0 != BinaryOperation(Number(42), '!=',
+                                    Number(3)).evaluate(parent).value
+
+    def test_binary_operation_and():
+        parent = Scope()
+        assert 0 == BinaryOperation(Number(0), '&&',
+                                    Number(3)).evaluate(parent).value
+
+    def test_binary_operation_or():
+        parent = Scope()
+        assert 0 != BinaryOperation(Number(0), '||',
+                                    Number(42)).evaluate(parent).value
 
 
-def test_UnaryOperation():
-    parent = Scope()
-    x = Number(42)
-    assert -42 == UnaryOperation('-', x).evaluate(parent).value
-    assert 0 == UnaryOperation('!', x).evaluate(parent).value
+class UnaryOperation:
+    def test_unary_operation_minus():
+        parent = Scope()
+        assert -42 == UnaryOperation('-', Number(42)).evaluate(parent).value
+
+    def test_unary_operation_not():
+        parent = Scope()
+        assert 0 == UnaryOperation('!', Number(42)).evaluate(parent).value
