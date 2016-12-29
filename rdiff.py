@@ -11,9 +11,9 @@ if __name__ == "__main__":
     files = sorted(set(files1 + files2))
     for file in files:
         if file not in files2:
-            print('Only in ', folder1, ': ', file, sep = '')
+            print('Only in ', folder1, ': ', file, sep='')
         elif file not in files1:
-            print('Only in ', folder2, ': ', file, sep = '')
+            print('Only in ', folder2, ': ', file, sep='')
         else:
             name1 = os.path.join(folder1, file)
             with open(name1) as file1:
