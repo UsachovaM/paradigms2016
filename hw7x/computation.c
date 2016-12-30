@@ -13,9 +13,9 @@ void thpool_submit_computation(
 ) {
     computation->task.f = computation->f;
     computation->task.arg = computation->arg;
-    computation->finished = false;
     pthread_mutex_init(&computation->mutex, NULL);
     pthread_cond_init(&computation->cond_var, NULL);
+    computation->finished = false;
     computation->on_complete = on_complete;
     computation->on_complete_arg = on_complete_arg;
     thpool_submit(pool, &computation->task);
@@ -27,6 +27,7 @@ void thpool_complete_computation(
     pthread_mutex_lock(&computation->mutex);
     computation->finished = true;
     pthread_cond_signal(&computation->cond_var);
+    pthread_mutex_unlock(&computation->mutex);
     if (computation->on_complete) 
         computation->on_complete(computation->on_complete_arg);
 }
