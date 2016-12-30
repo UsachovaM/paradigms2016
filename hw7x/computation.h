@@ -9,10 +9,9 @@ struct Computation {
     void (*f)(void*);
     void* arg;
     struct Task task;
-    bool finished;
     pthread_mutex_t mutex;
     pthread_cond_t cond_var;
-    
+    bool finished;
     OnComputationComplete on_complete;
     void* on_complete_arg;
 };
