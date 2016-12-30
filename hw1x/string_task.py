@@ -8,10 +8,9 @@ def make_plural(s):
 
 
 def get_hash_tag(s):
-    first_bkt = s.find('{')
-    substr = s[first_bkt:]
+    substr = s[s.find('{'):]
     if '{' in s and substr.find('}') > 1:
-        return s[s.find('{') + 1: substr.find('}') + s.find('{')]
+        return substr[1: substr.find('}')]
     else:
         return s
 
@@ -19,25 +18,18 @@ def get_hash_tag(s):
 def tokenize(s):
     ans = []
     temp = ''
-    flag = [0, 0]
+    flag = False
     for char in s:
-        if flag[0] == 0:
-            if char == '<':
-                if flag[1] == 0:
-                    flag[0] = 1
-                else:
-                    flag[1] = 0
-            elif char == '>':
-                flag[1] = 1
-            elif char == ' ':
+        if char == '<':
+            if not flag:
+                flag = True
+        elif char == '>':
+            if flag:
+                flag = False
+        elif char == ' ' and not flag:
                 ans.append(temp)
                 temp = ''
-            else:
-                temp += char
         else:
-            if char == '>':
-                flag[0] = 0
-            else:
-                temp += char
+            temp += char
     ans.append(temp)
     return ans
