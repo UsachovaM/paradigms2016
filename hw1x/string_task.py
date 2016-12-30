@@ -21,14 +21,12 @@ def tokenize(s):
     flag = False
     for char in s:
         if char == '<':
-            if not flag:
-                flag = True
+            flag = True
         elif char == '>':
-            if flag:
-                flag = False
+            flag = False
         elif char == ' ' and not flag:
-                ans.append(temp)
-                temp = ''
+            ans.append(temp)
+            temp = ''
         else:
             temp += char
     ans.append(temp)
