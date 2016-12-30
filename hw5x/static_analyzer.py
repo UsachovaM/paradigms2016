@@ -9,23 +9,14 @@ class PureCheckVisitor:
         return True
 
     def visit_function(self, tree):
-        if tree.body:
-            return all([self.visit(x) for x in tree.body])
-        else:
-            return True
+        return all([self.visit(x) for x in (tree.body or [])])
 
     def visit_function_definition(self, tree):
         return self.visit(tree.function)
 
     def visit_conditional(self, tree):
-        if tree.if_true:
-            list_true = all([self.visit(x) for x in tree.if_true])
-        else:
-            list_true = True
-        if tree.if_false:
-            list_false = all([self.visit(x) for x in tree.if_false])
-        else:
-            list_false = True
+        list_true = all([self.visit(x) for x in (tree.if_true or [])])
+        list_false = all([self.visit(x) for x in (tree.if_false or [])])
         return list_true and list_false and self.visit(tree.condition)
 
     def visit_print(self, tree):
@@ -35,11 +26,8 @@ class PureCheckVisitor:
         return False
 
     def visit_function_call(self, tree):
-        if tree.args:
-            res = all([self.visit(x) for x in tree.args])
-            return res and self.visit(tree.fun_expr)
-        else:
-            return self.visit(tree.fun_expr)
+        res = all([self.visit(x) for x in (tree.args or [])])
+        return res and self.visit(tree.fun_expr)
 
     def visit_reference(self, tree):
         return True
@@ -57,7 +45,7 @@ class NoReturnValueCheckVisitor:
             return [self.visit(x) for x in list_t][-1]
         else:
             return False
-    
+
     def visit(self, tree):
         return tree.accept(self)
 
